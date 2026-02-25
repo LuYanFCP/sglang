@@ -65,16 +65,14 @@ class OpenAIServingTranscription(OpenAIServingBase):
         raw_request: Request = None,
     ) -> tuple[GenerateReqInput, TranscriptionRequest]:
         """Convert transcription request to internal format."""
-        # Build sampling params - include language for WhisperProcessor
         sampling_params = {
             "temperature": request.temperature,
-            "max_new_tokens": 448,  # Whisper default max tokens
-            "language": request.language,  # Pass to WhisperProcessor for language-specific decoding
+            "max_new_tokens": 448,
+            "language": request.language,
         }
 
-        # For Whisper, we pass audio_data and let the processor handle it
         adapted_request = GenerateReqInput(
-            text="",  # Empty text - Whisper processor will set proper decoder tokens
+            text="",
             audio_data=request.audio_data,
             sampling_params=sampling_params,
             stream=request.stream,
